@@ -12,6 +12,6 @@ class SpacePark extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'status'
+        'number', 'status', 'group_id', 'trouble'
     ];
 }

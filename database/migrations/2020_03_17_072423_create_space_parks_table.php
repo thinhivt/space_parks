@@ -15,8 +15,10 @@ class CreateSpaceParksTable extends Migration
     {
         Schema::create('space_parks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code');
+            $table->integer('number');
             $table->integer('status');
+            $table->string('trouble')->nullable();
+            $table->integer('group_id');
             $table->timestamps();
         });
     }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\SpacePark;
+use Redis;
 
 class SpaceParkController extends Controller
 {
@@ -25,7 +27,7 @@ class SpaceParkController extends Controller
      */
     public function create()
     {
-        //
+        return view('space_parks.create');
     }
 
     /**
@@ -36,7 +38,9 @@ class SpaceParkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $space_park = $request->except('_token');
+        SpacePark::insert($space_park);
+        return redirect()->Route('list-space-park');
     }
 
     /**
@@ -57,7 +61,8 @@ class SpaceParkController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
+    {   
+       
         $space_park = SpacePark::find($id);
         return view('space_parks.edit', compact('space_park'));
     }
@@ -71,6 +76,13 @@ class SpaceParkController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //dd('hello');
+        $redis = Redis::connection();
+        $redis->publish('status', Request::input('status'));
+        $space_park = SpacePark::find($id);
+        $data = $request->only('number', 'group_id', 'status', 'trouble');
+        $space_park->update($data);
+        return redirect()->Route('list-space-park');
         
     }
 
@@ -82,6 +94,8 @@ class SpaceParkController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $space_park = SpacePark::find($id);
+        $space_park->delete();
+        return redirect()->Route('list-space-park');
     }
 }

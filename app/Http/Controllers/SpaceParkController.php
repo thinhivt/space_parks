@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\SpacePark;
-use Redis;
+use LRedis;
 
 class SpaceParkController extends Controller
 {
@@ -76,9 +76,10 @@ class SpaceParkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd('hello');
-        $redis = Redis::connection();
-        $redis->publish('status', Request::input('status'));
+        
+        $redis = LRedis::connection();
+        //dd($redis);
+        $redis->publish('message', 'hello');
         $space_park = SpacePark::find($id);
         $data = $request->only('number', 'group_id', 'status', 'trouble');
         $space_park->update($data);

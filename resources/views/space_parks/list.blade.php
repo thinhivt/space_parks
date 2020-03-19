@@ -36,14 +36,15 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2" >
-              <div id="messages" ></div>
+              <p id="messages" ></p>
             </div>
         </div>
     </div>
     <script>
-        var socket = io.connect('http://localhost:8809');
-        socket.on('status', function (data) {
-            $( "#messages" ).append( "<p>"+data+"</p>" );
-          });
+       var socket = io.connect('http://localhost:8081');
+        socket.on("message", function (data) {
+        	console.log(data);
+            $('#messages').append(data);
+        });
     </script>
 @endsection
